@@ -24,7 +24,8 @@ def lambda_handler(event, context):
         delete_old_snapshots(descriptions)
 
 def events_get():
-    now = datetime.datetime.now()
+    DIFF_JST_FROM_UTC = 21
+    now = datetime.datetime.utcnow() + datetime.timedelta(hours=DIFF_JST_FROM_UTC)
     today = datetime.datetime(now.year, now.month, now.day, 0, 0, 0, 0)
     yesterday = today - datetime.timedelta(days=1)
     today_unix = int(today.timestamp()*1000)
