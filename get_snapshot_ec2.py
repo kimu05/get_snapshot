@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # 特定のタグを含むEBSボリュームのスナップショットを作成する。
-#   Python 3.6
+#   Python 3.9
 #
 #   （参考）
 #   https://qiita.com/HorieH/items/66bb68d12bd8fdbbd076
@@ -24,7 +24,7 @@ def lambda_handler(event, context):
         delete_old_snapshots(descriptions)
 
 def events_get():
-    DIFF_JST_FROM_UTC = 21
+    DIFF_JST_FROM_UTC = 9
     now = datetime.datetime.utcnow() + datetime.timedelta(hours=DIFF_JST_FROM_UTC)
     today = datetime.datetime(now.year, now.month, now.day, 0, 0, 0, 0)
     yesterday = today - datetime.timedelta(days=1)
@@ -64,7 +64,7 @@ def create_snapshots():
                 continue
 
             volume_id = b['Ebs']['VolumeId']
-            description = volume_id if tags.get('Name') is '' else '%s(%s)' % (volume_id, tags['Name'])
+            description = volume_id if tags.get('Name') == '' else '%s(%s)' % (volume_id, tags['Name'])
             description = 'Auto Snapshot ' + description
 
             snapshot = _create_snapshot(volume_id, description)
